@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Iworkout } from "../Types/workout.type";
-import { IoTodayOutline } from "react-icons/io5";
-import { FaRegBookmark } from "react-icons/fa";
+import AddButton from "../Components/WorkoutDetails/AddButton";
+import SaveButton from "../Components/WorkoutDetails/SaveButton";
 
 const getWorkoutdata = async (): Promise<Iworkout[]> => {
     const res = await fetch("https://api.abcz.workers.dev/api/fitlog");
@@ -151,24 +151,8 @@ const SingleWorkoutShow = async ({ params, }: { params: Promise<{ workoutslug: s
                         </div>
 
                         <div className="mt-6 flex gap-2 justify-between md:justify-start">
-                            <button
-                                type="button"
-                                className="rounded-xl px-5 md:px-7 py-2 md:py-3 text-sm text-[#0F1115] bg-[#d5ff45] flex items-center font-inter font-semibold gap-1 md:gap-2"
-                            >
-                                <span><IoTodayOutline color="#0F1115" size={16}/></span>
-                                Add to today&apos;s plan
-                            </button>
-
-                            <button
-                                className="rounded-xl border border-[#30343d] bg-transparent px-5 md:px-7 py-2 md:py-3 text-sm font-medium 
-                                font-inter
-                                text-[E5E7EB]
-                                hover:bg-[#191c22] 
-                                flex items-center gap-1 md:gap-2"
-                            >
-                                <span><FaRegBookmark color="#E5E7EB" size={16}/></span>
-                                Save for later
-                            </button>
+                            <AddButton workout={workout}></AddButton>
+                            <SaveButton workout={workout}></SaveButton>
                         </div>
 
                     </div>

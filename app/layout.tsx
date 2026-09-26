@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import WorkoutProvider from "./ContextProvider/WorkoutProvider";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Navbar></Navbar>
           {children}
           <Footer></Footer>
+           <ToastContainer position="bottom-right"/>
         </WorkoutProvider>
       </body>
     </html>

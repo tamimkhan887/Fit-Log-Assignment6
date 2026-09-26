@@ -1,10 +1,10 @@
 "use client"
 import { createContext, useState } from "react";
-
+import { Iworkout } from "../Types/workout.type";
+export const WorkoutContext = createContext({});
 const WorkoutProvider = ({children}:{children: React.ReactNode}) => {
-    const WorkoutContext = createContext({});
-    const [addWorkout , setAddWorkout] = useState([])
-    const [saveWorkout , setSaveWorkout] = useState([])
+    const [addWorkout , setAddWorkout] = useState<Iworkout[]>([])
+    const [saveWorkout , setSaveWorkout] = useState<Iworkout[]>([])
     const sharedData = {
         addWorkout ,
         saveWorkout,
