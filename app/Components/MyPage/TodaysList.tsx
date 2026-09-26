@@ -6,7 +6,7 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 import { MdOutlineStarOutline } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
 
-const TodaysList = ({ workout }: { workout: Iworkout }) => {
+const TodaysList = ({ workout , handleDelete }: { workout: Iworkout ; handleDelete:(id:(number | string))=>void }) => {
     return (
         <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -35,7 +35,7 @@ const TodaysList = ({ workout }: { workout: Iworkout }) => {
             <div className="flex items-center gap-6">
                 <button className="font-inter text-xs text-white border border-[#374151] rounded-full px-6 py-3">View Details</button>
                 <button className="flex items-center"><IoCheckmarkOutline /><span>Mark as Done</span></button>
-                <button><RxCross1 size={24} color="#6B7280"/></button>
+                <button onClick={() => handleDelete(String(workout.id))}><RxCross1 size={24} color="#6B7280"/></button>
             </div>
         </div>
     );

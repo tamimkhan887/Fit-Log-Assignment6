@@ -31,8 +31,8 @@ const Navbar = () => {
                 {links}
             </ul>
             <div className="flex gap-6">
-                <button className=" font-medium text-xs font-inter text-[#9CA3AF]">Plan <span className="ml-2 bg-[#C2F800] px-2 py-1 text-black font-bold font-inter rounded-full">{addWorkout.length}</span></button>
-                <button className="text-[#9CA3AF] font-inter font-medium text-xs">Saved <span className="ml-2 text-[#D1D5DB] text-[11px] font-inter font-medium border px-2 py-1 border-[#2D313B] rounded-full">{saveWorkout.length}</span></button>
+                <Link href={"/myplan"}> <button className=" font-medium text-xs font-inter text-[#9CA3AF]">Plan <span className="ml-2 bg-[#C2F800] px-2 py-1 text-black font-bold font-inter rounded-full">{addWorkout.length}</span></button> </Link>
+                <Link href={"/myplan"}><button className="text-[#9CA3AF] font-inter font-medium text-xs">Saved <span className="ml-2 text-[#D1D5DB] text-[11px] font-inter font-medium border px-2 py-1 border-[#2D313B] rounded-full">{saveWorkout.length}</span></button></Link>
             </div>
             {isMenuOpen && (<div className="absolute top-full left-0 w-full bg-[#090A0D] border-b border-[#32363d] md:hidden"> <ul className="flex flex-col gap-2 p-4"> {links} </ul> </div>)}
         </nav>

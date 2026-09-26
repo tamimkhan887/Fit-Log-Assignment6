@@ -1,50 +1,81 @@
 "use client";
 
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { WorkoutContext } from "../ContextProvider/WorkoutProvider";
 import { Iworkout } from "../Types/workout.type";
 import TodaysList from "../Components/MyPage/TodaysList";
+import { toast } from "react-toastify";
 
 interface MyPageProps {
     addWorkout: Iworkout[];
     saveWorkout: Iworkout[];
+    setAddWorkout: Dispatch<SetStateAction<Iworkout[]>>;
+    setSaveWorkout: Dispatch<SetStateAction<Iworkout[]>>;
 }
-
 
 const Page = () => {
     const [toggle, setToggle] = useState<"today" | "saved">("today");
-    const [sortBy, setSortBy] = useState<"Duration" | "Calories" | "Rating">()
 
-    const sortWorkouts = (workouts: Iworkout[]) => {
-        const sortedWorkout = [...workouts]
+    const [sortBy, setSortBy] = useState<
+        "" | "Duration" | "Calories" | "Rating"
+    >("");
+
+    const {
+        addWorkout,
+        saveWorkout,
+        setAddWorkout,
+        setSaveWorkout,
+    } = useContext(WorkoutContext) as MyPageProps;
+
+    const currentWorkout =
+        toggle === "today" ? addWorkout : saveWorkout;
+
+    const handleDelete = (id: number | string) => {
+        if (toggle === "today") {
+            setAddWorkout((prev) =>
+                prev.filter(
+                    (workout) => String(workout.id) !== String(id)
+                )
+            );
+        } else {
+            setSaveWorkout((prev) =>
+                prev.filter(
+                    (workout) => String(workout.id) !== String(id)
+                )
+            );
+        }
+        toast.success("Delete Successful")
+    };
+
+    const sortedWorkout = [...currentWorkout].sort((a, b) => {
         if (sortBy === "Duration") {
-            sortedWorkout.sort((a, b) => b.duration - a.duration)
-        } else if (sortBy === "Calories") {
-            sortedWorkout.sort((a, b) => b.caloriesBurned - a.caloriesBurned)
+            return Number(b.duration) - Number(a.duration);
         }
-        else if (sortBy === "Rating") {
-            sortedWorkout.sort((a, b) => b.rating - a.rating)
+
+        if (sortBy === "Calories") {
+            return Number(b.caloriesBurned) - Number(a.caloriesBurned);
         }
-        return sortedWorkout 
-    }
-    const { addWorkout, saveWorkout } = useContext(WorkoutContext) as MyPageProps;
 
+        if (sortBy === "Rating") {
+            return Number(b.rating) - Number(a.rating);
+        }
 
-    const sortedAddWorkouts = sortWorkouts(addWorkout)
-    const sortedSaveWorkouts = sortWorkouts(saveWorkout)
+        return 0;
+    });
 
-    const currentWorkout = toggle === "today" ? sortedAddWorkouts : sortedSaveWorkouts;
-
-        const totalCalories = currentWorkout.reduce(
-        (total, workout) => total + workout.caloriesBurned,
+    const totalCalories = sortedWorkout.reduce(
+        (total, workout) =>
+            total + Number(workout.caloriesBurned),
         0
     );
 
-    const totalDuration = currentWorkout.reduce(
-        (total, workout) => total + workout.duration,
+    const totalDuration = sortedWorkout.reduce(
+        (total, workout) =>
+            total + Number(workout.duration),
         0
     );
+
     return (
         <div className="px-6 md:px-8 lg:px-12 py-4 md:py-7 lg:py-10">
             <h3 className="text-[30px] font-oswald font-bold text-white">
@@ -55,16 +86,14 @@ const Page = () => {
                 Cap of five lifts for today. Finish them, then load more.
             </p>
 
-            {/* Stats */}
-            <div className="flex  justify-between items-center bg-[#13161D] px-6 py-8 rounded-2xl mt-6">
-
+            <div className="flex justify-between items-center bg-[#13161D] px-6 py-8 rounded-2xl mt-6">
                 <div className="space-y-2">
                     <h3 className="text-[#8A92A0] font-inter text-xs">
                         Exercises
                     </h3>
 
                     <p className="text-4xl font-bold font-oswald text-[#CCFF00]">
-                        {currentWorkout.length}
+                        {sortedWorkout.length}
                     </p>
                 </div>
 
@@ -87,19 +116,16 @@ const Page = () => {
                         {totalCalories}
                     </p>
                 </div>
-
             </div>
 
             <div className="my-6">
-                <div className="flex flex-col md:flex-row  justify-between items-center gap-4">
-
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="bg-[#151921] px-2 py-2 flex gap-2 rounded-xl">
-
                         <button
                             onClick={() => setToggle("today")}
                             className={`text-xs font-inter px-8 py-2 rounded-xl ${toggle === "today"
-                                ? "font-bold bg-[#1F242D] text-white"
-                                : "text-[#8A92A0]"
+                                    ? "font-bold bg-[#1F242D] text-white"
+                                    : "text-[#8A92A0]"
                                 }`}
                         >
                             Today&apos;s Plan
@@ -108,38 +134,53 @@ const Page = () => {
                         <button
                             onClick={() => setToggle("saved")}
                             className={`text-xs font-inter px-8 py-2 rounded-xl ${toggle === "saved"
-                                ? "font-bold bg-[#1F242D] text-white"
-                                : "text-[#8A92A0]"
+                                    ? "font-bold bg-[#1F242D] text-white"
+                                    : "text-[#8A92A0]"
                                 }`}
                         >
                             Saved
                         </button>
-
                     </div>
 
-                    {/* Sort */}
                     <div className="flex items-center gap-4">
                         <h3 className="text-nowrap text-[#8A92A0] font-inter text-xs">
                             Sort By
                         </h3>
 
                         <select
-                            defaultValue="Duration"
                             className="select rounded-lg"
                             value={sortBy}
-                            onChange={(e)=>setSortBy(e.target.value as "Duration" | "Calories" | "Rating")}
+                            onChange={(e) =>
+                                setSortBy(
+                                    e.target.value as
+                                    | ""
+                                    | "Duration"
+                                    | "Calories"
+                                    | "Rating"
+                                )
+                            }
                         >
-                            <option>Duration</option>
-                            <option>Calories</option>
-                            <option>Rating</option>
+                            <option value="">
+                                Choose Sort
+                            </option>
+
+                            <option value="Duration">
+                                Duration
+                            </option>
+
+                            <option value="Calories">
+                                Calories
+                            </option>
+
+                            <option value="Rating">
+                                Rating
+                            </option>
                         </select>
                     </div>
-
                 </div>
 
-                {currentWorkout.length === 0 && (
+                {sortedWorkout.length === 0 && (
                     <div className="bg-[#11131780] flex flex-col justify-center items-center py-24 mt-6 rounded-xl">
-
                         <h3 className="font-oswald font-bold text-xl">
                             NOTHING HERE YET
                         </h3>
@@ -153,18 +194,20 @@ const Page = () => {
                                 Go to workouts
                             </button>
                         </Link>
-
                     </div>
                 )}
 
-                {currentWorkout.length > 0 && (
+                {sortedWorkout.length > 0 && (
                     <div className="mt-6 space-y-4">
-                        {currentWorkout.map((workout) => (
-                            <TodaysList key={workout.id} workout={workout}></TodaysList>
+                        {sortedWorkout.map((workout) => (
+                            <TodaysList
+                                key={workout.id}
+                                workout={workout}
+                                handleDelete={handleDelete}
+                            />
                         ))}
                     </div>
                 )}
-
             </div>
         </div>
     );

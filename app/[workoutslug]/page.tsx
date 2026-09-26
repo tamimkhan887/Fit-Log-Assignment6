@@ -5,7 +5,7 @@ import AddButton from "../Components/WorkoutDetails/AddButton";
 import SaveButton from "../Components/WorkoutDetails/SaveButton";
 
 const getWorkoutdata = async (): Promise<Iworkout[]> => {
-    const res = await fetch("https://api.abcz.workers.dev/api/fitlog");
+    const res = await fetch("https://api.api-store.workers.dev/api/fitlog");
     const data: Iworkout[] = await res.json();
     return data;
 };
