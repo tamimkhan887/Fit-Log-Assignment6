@@ -21,6 +21,7 @@ const Page = () => {
         "" | "Duration" | "Calories" | "Rating"
     >("");
 
+    const [mark , setMark] = useState(false);
     const {
         addWorkout,
         saveWorkout,
@@ -204,6 +205,8 @@ const Page = () => {
                                 key={workout.id}
                                 workout={workout}
                                 handleDelete={handleDelete}
+                                mark={mark}  
+                                setMark={setMark}
                             />
                         ))}
                     </div>
