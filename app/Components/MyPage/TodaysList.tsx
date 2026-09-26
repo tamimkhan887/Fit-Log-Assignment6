@@ -1,14 +1,15 @@
 import { Iworkout } from "@/app/Types/workout.type";
 import Image from "next/image";
+import Link from "next/link";
 import { FaFire } from "react-icons/fa";
 import { GoClock } from "react-icons/go";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { MdOutlineStarOutline } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
 
-const TodaysList = ({ workout , handleDelete }: { workout: Iworkout ; handleDelete:(id:(number | string))=>void }) => {
+const TodaysList = ({ workout, handleDelete }: { workout: Iworkout; handleDelete: (id: (number | string)) => void }) => {
     return (
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between md:items-center gap-6 md:gap-0">
             <div className="flex items-center gap-4">
                 <div>
                     <Image src={workout.image} alt="workout image" width={120} height={80} className="rounded-xl"></Image>
@@ -32,10 +33,12 @@ const TodaysList = ({ workout , handleDelete }: { workout: Iworkout ; handleDele
                     </div>
                 </div>
             </div>
-            <div className="flex items-center gap-6">
-                <button className="font-inter text-xs text-white border border-[#374151] rounded-full px-6 py-3">View Details</button>
+            <div className="flex justify-between md:justify-start items-center gap-6">
+                <Link href={`/${workout.id}`}>
+                    <button className="font-inter text-xs text-white border border-[#374151] rounded-full px-6 py-3">View Details</button>
+                </Link>
                 <button className="flex items-center"><IoCheckmarkOutline /><span>Mark as Done</span></button>
-                <button onClick={() => handleDelete(String(workout.id))}><RxCross1 size={24} color="#6B7280"/></button>
+                <button onClick={() => handleDelete(String(workout.id))}><RxCross1 size={24} color="#6B7280" /></button>
             </div>
         </div>
     );
