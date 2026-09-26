@@ -11,15 +11,32 @@ interface MyPageProps {
     saveWorkout: Iworkout[];
 }
 
+
 const Page = () => {
     const [toggle, setToggle] = useState<"today" | "saved">("today");
+    const [sortBy, setSortBy] = useState<"Duration" | "Calories" | "Rating">()
 
+    const sortWorkouts = (workouts: Iworkout[]) => {
+        const sortedWorkout = [...workouts]
+        if (sortBy === "Duration") {
+            sortedWorkout.sort((a, b) => b.duration - a.duration)
+        } else if (sortBy === "Calories") {
+            sortedWorkout.sort((a, b) => b.caloriesBurned - a.caloriesBurned)
+        }
+        else if (sortBy === "Rating") {
+            sortedWorkout.sort((a, b) => b.rating - a.rating)
+        }
+        return sortedWorkout 
+    }
     const { addWorkout, saveWorkout } = useContext(WorkoutContext) as MyPageProps;
 
-    // Select data based on toggle
-    const currentWorkout = toggle === "today" ? addWorkout : saveWorkout;
 
-    const totalCalories = currentWorkout.reduce(
+    const sortedAddWorkouts = sortWorkouts(addWorkout)
+    const sortedSaveWorkouts = sortWorkouts(saveWorkout)
+
+    const currentWorkout = toggle === "today" ? sortedAddWorkouts : sortedSaveWorkouts;
+
+        const totalCalories = currentWorkout.reduce(
         (total, workout) => total + workout.caloriesBurned,
         0
     );
@@ -28,9 +45,8 @@ const Page = () => {
         (total, workout) => total + workout.duration,
         0
     );
-
     return (
-        <div className="px-12 py-10">
+        <div className="px-6 md:px-8 lg:px-12 py-4 md:py-7 lg:py-10">
             <h3 className="text-[30px] font-oswald font-bold text-white">
                 MY PLAN
             </h3>
@@ -40,7 +56,7 @@ const Page = () => {
             </p>
 
             {/* Stats */}
-            <div className="flex justify-between items-center bg-[#13161D] px-6 py-8 rounded-2xl mt-6">
+            <div className="flex  justify-between items-center bg-[#13161D] px-6 py-8 rounded-2xl mt-6">
 
                 <div className="space-y-2">
                     <h3 className="text-[#8A92A0] font-inter text-xs">
@@ -75,28 +91,26 @@ const Page = () => {
             </div>
 
             <div className="my-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col md:flex-row  justify-between items-center gap-4">
 
                     <div className="bg-[#151921] px-2 py-2 flex gap-2 rounded-xl">
 
                         <button
                             onClick={() => setToggle("today")}
-                            className={`text-xs font-inter px-8 py-2 rounded-xl ${
-                                toggle === "today"
-                                    ? "font-bold bg-[#1F242D] text-white"
-                                    : "text-[#8A92A0]"
-                            }`}
+                            className={`text-xs font-inter px-8 py-2 rounded-xl ${toggle === "today"
+                                ? "font-bold bg-[#1F242D] text-white"
+                                : "text-[#8A92A0]"
+                                }`}
                         >
                             Today&apos;s Plan
                         </button>
 
                         <button
                             onClick={() => setToggle("saved")}
-                            className={`text-xs font-inter px-8 py-2 rounded-xl ${
-                                toggle === "saved"
-                                    ? "font-bold bg-[#1F242D] text-white"
-                                    : "text-[#8A92A0]"
-                            }`}
+                            className={`text-xs font-inter px-8 py-2 rounded-xl ${toggle === "saved"
+                                ? "font-bold bg-[#1F242D] text-white"
+                                : "text-[#8A92A0]"
+                                }`}
                         >
                             Saved
                         </button>
@@ -112,6 +126,8 @@ const Page = () => {
                         <select
                             defaultValue="Duration"
                             className="select rounded-lg"
+                            value={sortBy}
+                            onChange={(e)=>setSortBy(e.target.value as "Duration" | "Calories" | "Rating")}
                         >
                             <option>Duration</option>
                             <option>Calories</option>
@@ -121,7 +137,6 @@ const Page = () => {
 
                 </div>
 
-                {/* Empty State */}
                 {currentWorkout.length === 0 && (
                     <div className="bg-[#11131780] flex flex-col justify-center items-center py-24 mt-6 rounded-xl">
 
