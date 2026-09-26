@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Footer = () => {
     return (
-        <div className="border border-[#1A1D24] mt-16 bg-[#090A0D] py-10 px-6 flex justify-between items-center gap-10">
+        <div className="border border-[#1A1D24] bg-[#090A0D] py-10 px-6 flex justify-between items-center gap-10">
             <Link href={"/"}>
                 <div className="flex items-center gap-2.5 ">
                     <Image src={logo} alt="FitLOG Logo"></Image>
