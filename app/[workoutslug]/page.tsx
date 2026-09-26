@@ -22,7 +22,7 @@ const SingleWorkoutShow = async ({ params, }: { params: Promise<{ workoutslug: s
     return (
         <div className="bg-[#090A0D] py-12">
             <div className="p-3 sm:p-5 lg:p-6 ">
-                <div className="flex flex-col gap-14 lg:flex-row">
+                <div className="flex justify-center flex-col gap-14 lg:flex-row">
 
                     <div>
                         <Image

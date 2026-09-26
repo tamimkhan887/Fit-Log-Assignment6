@@ -4,11 +4,13 @@ import logo from "@/public/logo.png"
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const pathname = usePathname();
     const links = <>
-        <li className="text-[#C2F800] font-semibold font-inter text-xs py-1.5 px-4 rounded-full bg-[#303f21]">Workouts</li>
-        <li className="font-semibold font-inter text-xs py-1.5 px-4">My Plan</li>
+        <Link href={"/"}><li className={`${pathname === "/" ? "text-[#C2F800] font-semibold font-inter text-xs py-1.5 px-4 rounded-full bg-[#303f21]" : "font-semibold font-inter text-xs py-1.5 px-4 text-[#9CA3AF]"}`}>Workouts</li></Link>
+        <Link href={"/myplan"}><li className={`${pathname === "/myplan" ? "text-[#C2F800] font-semibold font-inter text-xs py-1.5 px-4 rounded-full bg-[#303f21]" : "font-semibold font-inter text-xs py-1.5 px-4 text-[#9CA3AF]"}`}>My Plan</li></Link>
     </>
     return (
         <nav className="flex justify-between items-center border-b border-b-[#32363d] px-6 py-6 z-50 sticky top-0 bg-[#090A0D]">
