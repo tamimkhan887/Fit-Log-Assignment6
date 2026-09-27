@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+    Dispatch,
+    SetStateAction,
+    useContext,
+    useState,
+} from "react";
+import { toast } from "react-toastify";
 import { WorkoutContext } from "../ContextProvider/WorkoutProvider";
 import { Iworkout } from "../Types/workout.type";
 import TodaysList from "../Components/MyPage/TodaysList";
-import { toast } from "react-toastify";
 
 interface MyPageProps {
     addWorkout: Iworkout[];
@@ -21,7 +26,6 @@ const Page = () => {
         "" | "Duration" | "Calories" | "Rating"
     >("");
 
-    const [mark , setMark] = useState(false);
     const {
         addWorkout,
         saveWorkout,
@@ -36,30 +40,42 @@ const Page = () => {
         if (toggle === "today") {
             setAddWorkout((prev) =>
                 prev.filter(
-                    (workout) => String(workout.id) !== String(id)
+                    (workout) =>
+                        String(workout.id) !== String(id)
                 )
             );
         } else {
             setSaveWorkout((prev) =>
                 prev.filter(
-                    (workout) => String(workout.id) !== String(id)
+                    (workout) =>
+                        String(workout.id) !== String(id)
                 )
             );
         }
-        toast.success("Delete Successful")
+
+        toast.success("Delete Successful");
     };
 
     const sortedWorkout = [...currentWorkout].sort((a, b) => {
         if (sortBy === "Duration") {
-            return Number(b.duration) - Number(a.duration);
+            return (
+                Number(b.duration) -
+                Number(a.duration)
+            );
         }
 
         if (sortBy === "Calories") {
-            return Number(b.caloriesBurned) - Number(a.caloriesBurned);
+            return (
+                Number(b.caloriesBurned) -
+                Number(a.caloriesBurned)
+            );
         }
 
         if (sortBy === "Rating") {
-            return Number(b.rating) - Number(a.rating);
+            return (
+                Number(b.rating) -
+                Number(a.rating)
+            );
         }
 
         return 0;
@@ -123,21 +139,27 @@ const Page = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="bg-[#151921] px-2 py-2 flex gap-2 rounded-xl">
                         <button
-                            onClick={() => setToggle("today")}
-                            className={`text-xs font-inter px-8 py-2 rounded-xl ${toggle === "today"
+                            onClick={() =>
+                                setToggle("today")
+                            }
+                            className={`text-xs font-inter px-8 py-2 rounded-xl ${
+                                toggle === "today"
                                     ? "font-bold bg-[#1F242D] text-white"
                                     : "text-[#8A92A0]"
-                                }`}
+                            }`}
                         >
                             Today&apos;s Plan
                         </button>
 
                         <button
-                            onClick={() => setToggle("saved")}
-                            className={`text-xs font-inter px-8 py-2 rounded-xl ${toggle === "saved"
+                            onClick={() =>
+                                setToggle("saved")
+                            }
+                            className={`text-xs font-inter px-8 py-2 rounded-xl ${
+                                toggle === "saved"
                                     ? "font-bold bg-[#1F242D] text-white"
                                     : "text-[#8A92A0]"
-                                }`}
+                            }`}
                         >
                             Saved
                         </button>
@@ -154,10 +176,10 @@ const Page = () => {
                             onChange={(e) =>
                                 setSortBy(
                                     e.target.value as
-                                    | ""
-                                    | "Duration"
-                                    | "Calories"
-                                    | "Rating"
+                                        | ""
+                                        | "Duration"
+                                        | "Calories"
+                                        | "Rating"
                                 )
                             }
                         >
@@ -205,8 +227,6 @@ const Page = () => {
                                 key={workout.id}
                                 workout={workout}
                                 handleDelete={handleDelete}
-                                mark={mark}  
-                                setMark={setMark}
                             />
                         ))}
                     </div>
